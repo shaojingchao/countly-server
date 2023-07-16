@@ -1201,8 +1201,13 @@ var pluginManager = function pluginManager() {
                 return resolve(errors);
             }
             var cwd = eplugin ? eplugin.rfs : path.join(__dirname, plugin);
-            if (!self.getConfig("api").offline_mode) {
-                const cmd = spawn('sudo', ["npm", "install", "--unsafe-perm"], {cwd: cwd});
+            //if we are on docker skip npm install. 
+            if (process && process.env && process.env.COUNTLY_CONTAINER) {
+                console.log('Skipping on docker');
+                resolve(errors);
+            }
+            else if (!self.getConfig("api").offline_mode) {
+                const cmd = spawn('npm', ["install"], {cwd: cwd});
                 var error2 = "";
 
                 cmd.stdout.on('data', (data) => {
@@ -1213,7 +1218,8 @@ var pluginManager = function pluginManager() {
                     error2 += data;
                 });
 
-                cmd.on('error', function() {
+                cmd.on('error', function(error) {
+                    console.log(error);
                     errors = true;
                 });
 

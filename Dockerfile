@@ -1,11 +1,14 @@
-FROM phusion/baseimage:0.11
+FROM phusion/baseimage:focal-1.2.0
 
-ARG COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,logger,systemlogs,populator,reports,crashes,push,star-rating,slipping-away-users,compare,server-stats,dbviewer,times-of-day,compliance-hub,alerts,onboarding,consolidate,remote-config,hooks,dashboards
+ARG COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,logger,systemlogs,populator,reports,crashes,push,star-rating,slipping-away-users,compare,server-stats,dbviewer,times-of-day,compliance-hub,alerts,onboarding,consolidate,remote-config,hooks,dashboards,sdk,data-manager
 # Enterprise Edition:
-#ARG COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,license,drill,funnels,retention_segments,flows,cohorts,surveys,remote-config,ab-testing,formulas,activity-map,concurrent_users,revenue,logger,systemlogs,populator,reports,crashes,push,geo,block,users,star-rating,slipping-away-users,compare,server-stats,dbviewer,crash_symbolication,crashes-jira,groups,white-labeling,alerts,times-of-day,compliance-hub,onboarding,active_users,performance-monitoring,config-transfer,consolidate,data-manager,hooks,dashboards,heatmaps
+#ARG COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,license,drill,funnels,retention_segments,flows,cohorts,surveys,remote-config,ab-testing,formulas,activity-map,concurrent_users,revenue,logger,systemlogs,populator,reports,crashes,push,geo,block,users,star-rating,slipping-away-users,compare,server-stats,dbviewer,crash_symbolication,crashes-jira,groups,white-labeling,alerts,times-of-day,compliance-hub,onboarding,active_users,performance-monitoring,config-transfer,consolidate,data-manager,hooks,dashboards,heatmaps,sdk
 
 ARG COUNTLY_CONFIG_API_MONGODB_HOST=localhost
 ARG COUNTLY_CONFIG_FRONTEND_MONGODB_HOST=localhost
+
+ARG DEBIAN_FRONTEND=noninteractive
+ARG TZ=Etc/UTC
 
 CMD ["/sbin/my_init"]
 
@@ -18,17 +21,14 @@ ENV COUNTLY_CONTAINER="both" \
     INSIDE_DOCKER=1
 
 EXPOSE 80
+USER root
 
 ## Add MongoDB data volume
 VOLUME ["/var/lib/mongodb"]
 
 COPY / /opt/countly
 
-RUN  useradd -r -M -U -d /opt/countly -s /bin/false countly && \
-    mkdir -p /etc/sudoers.d && \
-	echo "countly ALL=(ALL) NOPASSWD: /usr/bin/sv restart countly-api countly-dashboard" >> /etc/sudoers.d/countly && \
-    apt-get update && apt-get install -y sudo && \
-    ln -T /bin/true /usr/bin/systemctl && \
+RUN apt-get update && apt-get install -y sudo && \
 	/opt/countly/bin/countly.install.sh && \
     rm /usr/bin/systemctl && \
     chown -R mongodb:mongodb /var/lib/mongodb && \

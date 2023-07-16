@@ -9,6 +9,7 @@ var plugin = {},
     Promise = require("bluebird"),
     trace = require("./parts/stacktrace.js"),
     versionUtils = require('./parts/version.js'),
+    { DEFAULT_MAX_CUSTOM_FIELD_KEYS } = require('./parts/custom_field.js'),
     plugins = require('../../pluginManager.js'),
     { validateCreate, validateRead, validateUpdate, validateDelete } = require('../../../api/utils/rights.js');
 
@@ -18,7 +19,9 @@ plugins.setConfigs("crashes", {
     report_limit: 100,
     grouping_strategy: "error_and_file",
     smart_preprocessing: true,
-    smart_regexes: "{.*?}\n/.*?/"
+    smart_regexes: "{.*?}\n/.*?/",
+    same_app_version_crash_update: false,
+    max_custom_field_keys: DEFAULT_MAX_CUSTOM_FIELD_KEYS
 });
 
 /**
@@ -54,6 +57,10 @@ plugins.setConfigs("crashes", {
                 console.log(err);
             }
         });
+
+        setTimeout(() => {
+            require('../../../api/parts/jobs').job('crashes:cleanup_custom_field').replace().schedule("every 1 hour");
+        }, 10000);
     });
     var ranges = ["ram", "bat", "disk", "run", "session"];
     var segments = ["os_version", "os_name", "manufacture", "device", "resolution", "app_version", "cpu", "opengl", "orientation", "view", "browser"];
@@ -677,8 +684,18 @@ plugins.setConfigs("crashes", {
                                             if (crashGroup.latest_version && common.versionCompare(report.app_version.replace(/\./g, ":"), crashGroup.latest_version.replace(/\./g, ":")) > 0) {
                                                 group.latest_version = report.app_version;
                                                 group.latest_version_for_sort = versionUtils.transformAppVersion(report.app_version);
-                                                group.error = report.error;
-                                                group.lrid = report._id + "";
+                                            }
+                                            if (plugins.getConfig('crashes').same_app_version_crash_update) {
+                                                if (crashGroup.latest_version && common.versionCompare(report.app_version.replace(/\./g, ":"), crashGroup.latest_version.replace(/\./g, ":")) >= 0) {
+                                                    group.error = report.error;
+                                                    group.lrid = report._id + "";
+                                                }
+                                            }
+                                            else {
+                                                if (crashGroup.latest_version && common.versionCompare(report.app_version.replace(/\./g, ":"), crashGroup.latest_version.replace(/\./g, ":")) > 0) {
+                                                    group.error = report.error;
+                                                    group.lrid = report._id + "";
+                                                }
                                             }
                                             if (crashGroup.resolved_version && crashGroup.is_resolved && common.versionCompare(report.app_version.replace(/\./g, ":"), crashGroup.resolved_version.replace(/\./g, ":")) > 0) {
                                                 group.is_resolved = false;

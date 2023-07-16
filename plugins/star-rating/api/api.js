@@ -99,6 +99,10 @@ const widgetProperties = {
         required: false,
         type: "String"
     },
+    logoType: {
+        required: false,
+        type: "String"
+    },
     appearance: {
         required: false,
         type: "Object"
@@ -1232,6 +1236,7 @@ function uploadFile(myfile, id, callback) {
                 }
                 else {
                     switch (params.qstring.period) {
+                    case "prevMonth":
                     case "month":
                     case "day":
                     case "yesterday":
