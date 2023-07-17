@@ -2,6 +2,12 @@
   "name": "countly-server",
   "version": "23.06.0",
   "description": "innovative, real-time, open source mobile analytics application",
+  "scripts": {
+    "dev:api": "nodemon ./api/api.js",
+    "dev:fe": "nodemon ./frontend/express/app.js",
+    "dist-all": "npx grunt dist-all",
+    "test": "grunt --verbose"
+  },
   "keywords": [
     "analytics",
     "mobile",
@@ -11,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/countly/countly-server.git"
+    "url": "git://github.com/shaojingchao/countly-server.git"
   },
   "devDependencies": {
     "apidoc": "^1.0.1",
@@ -26,11 +32,6 @@
     "nyc": "15.1.0",
     "should": "13.2.3",
     "supertest": "6.3.3"
-  },
-  "scripts": {
-    "dev:api": "nodemon ./api/api.js",
-    "dev:fe": "nodemon ./frontend/express/app.js",
-    "test": "grunt --verbose"
   },
   "dependencies": {
     "all-the-cities": "3.1.0",

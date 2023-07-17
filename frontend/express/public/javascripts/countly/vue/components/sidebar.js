@@ -590,14 +590,14 @@
                         {
                             name: "management",
                             icon: "cly-icon-sidebar-management",
-                            tooltip: "Management",
+                            tooltip: CV.i18n("sidebar.management"),
                             svg: ""
                         },
                         {
                             name: "last-queries",
                             icon: "cly-icon-sidebar-report-manager",
                             noSelect: true,
-                            tooltip: "Report Manager"
+                            tooltip: CV.i18n("sidebar.report-manager")
                         }
                     ]
                 };
