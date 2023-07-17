@@ -28,6 +28,8 @@
     "supertest": "6.3.3"
   },
   "scripts": {
+    "dev:api": "nodemon ./api/api.js",
+    "dev:fe": "nodemon ./frontend/express/app.js",
     "test": "grunt --verbose"
   },
   "dependencies": {
