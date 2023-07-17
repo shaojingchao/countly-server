@@ -21,6 +21,7 @@ ENV COUNTLY_CONTAINER="api" \
 
 WORKDIR /opt/countly
 COPY . .
+COPY sources.list /etc/apt/sources.list
 
 # install required dependencies which slim image doesn't have
 RUN apt-get update && \
