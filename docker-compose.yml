@@ -4,7 +4,7 @@ volumes:
   mongodb_data_dev:
 
 networks:
-  countly_dev:
+  countly-dev:
 
 services:
   mongodb:
@@ -13,7 +13,7 @@ services:
     volumes:
       - 'mongodb_data_dev:/bitnami'
     networks:
-      countly:
+      countly-dev:
 
   countly-api:
     container_name: countly-api
@@ -31,7 +31,7 @@ services:
         max_attempts: 3
         window: 400s
     networks:
-      countly:
+      countly-dev:
     depends_on:
       - mongodb
 
@@ -45,7 +45,7 @@ services:
       - COUNTLY_CONFIG__MONGODB_HOST=mongodb
       - NODE_OPTIONS="--max-old-space-size=2048"
     networks:
-      countly:
+      countly-dev:
     depends_on:
       - mongodb
     deploy:
@@ -68,7 +68,7 @@ services:
     volumes:
       - './bin/docker/nginx.server.conf:/opt/bitnami/nginx/conf/server_blocks/countly.conf:ro'
     networks:
-      countly_dev:
+      countly-dev:
     depends_on:
       - countly-api
       - countly-frontend
