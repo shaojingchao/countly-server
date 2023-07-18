@@ -18,6 +18,9 @@ services:
   countly-api:
     container_name: countly-api
     image: '1247537710/countly-api:latest'
+    volumes:
+      - './log:/opt/countly/log'
+      - './uploads:/opt/countly/frontend/express/uploads'
     # Enterprise Edition: image: 'gcr.io/countly-01/api:20.11.2'
     environment:
       - COUNTLY_CONFIG__MAIL_TRANSPORT="nodemailer-smtp-transport"
