@@ -19,16 +19,16 @@ services:
     container_name: countly-api
     image: '1247537710/countly-api:latest'
     volumes:
-      - './log:/opt/countly/log'
-      - './uploads:/opt/countly/frontend/express/uploads'
+      # - './log:/opt/countly/log'
+      # - './uploads:/opt/countly/frontend/express/uploads'
     # Enterprise Edition: image: 'gcr.io/countly-01/api:20.11.2'
     environment:
       - COUNTLY_CONFIG__MAIL_TRANSPORT="nodemailer-smtp-transport"
       - COUNTLY_CONFIG__MAIL_CONFIG_HOST="smtp.qq.com"
       - COUNTLY_CONFIG__MAIL_CONFIG_PORT=465
-      - COUNTLY_CONFIG__MAIL_CONFIG_AUTH_USER="273175048"
-      - COUNTLY_CONFIG__MAIL_CONFIG_AUTH_PASS="knzkgxgeqjkubhjj"
-      - COUNTLY_CONFIG__MAIL_STRINGS_FROM="Countly dayingzi-nas@qq.com"
+      - COUNTLY_CONFIG__MAIL_CONFIG_AUTH_USER=""
+      - COUNTLY_CONFIG__MAIL_CONFIG_AUTH_PASS=""
+      - COUNTLY_CONFIG__MAIL_STRINGS_FROM="Countly Countly@qq.com"
       - COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,logger,systemlogs,populator,reports,crashes,push,star-rating,slipping-away-users,compare,server-stats,dbviewer,times-of-day,compliance-hub,alerts,onboarding,consolidate,remote-config,hooks,dashboards,sdk,data-manager
       # Enterprise Edition: - COUNTLY_PLUGINS=mobile,web,desktop,plugins,density,locale,browser,sources,views,license,drill,funnels,retention_segments,flows,cohorts,surveys,remote-config,ab-testing,formulas,activity-map,concurrent_users,revenue,logger,systemlogs,populator,reports,crashes,push,geo,block,restrict,users,star-rating,slipping-away-users,compare,server-stats,assistant,dbviewer,crash_symbolication,crashes-jira,groups,white-labeling,alerts,times-of-day,compliance-hub,onboarding,active_users,performance-monitoring,config-transfer,consolidate,data-manager,hooks,dashboards,sdk
       - COUNTLY_CONFIG__MONGODB_HOST=mongodb
