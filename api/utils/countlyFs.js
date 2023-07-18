@@ -1178,6 +1178,6 @@ countlyFs.setHandler = function(dbCon) {
 /**
 * Currently used file storage type
 **/
-countlyFs.type = config.fileStorage || "fs";
+countlyFs.type = config.fileStorage || "gridfs";
 
 module.exports = countlyFs;
