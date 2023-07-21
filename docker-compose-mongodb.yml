@@ -1,16 +1,16 @@
 version: "3.7"
 
 volumes:
-  countly_mongodb_data:
+  mongodb_data:
 
 networks:
   countly:
 
 services:
   mongodb:
-    image: 'mongo:4.4.15'
+    image: 'bitnami/mongodb:6.0.8'
     volumes:
-      - 'countly_mongodb_data:/bitnami'
+      - 'mongodb_data:/bitnami'
     ports:
       - '27017:27017'
     networks:
